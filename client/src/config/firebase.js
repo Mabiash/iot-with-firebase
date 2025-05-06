@@ -13,10 +13,7 @@ const firebaseConfig = {
   measurementId: "G-CNRH155KWL"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Export Realtime Database
 const db = getDatabase(app);
 
 export { db };

@@ -16,6 +16,6 @@ app.use(express.json());
 app.use("/", userRoute);
 app.use("/rooms", roomsPathRoute);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`app running on http//localhost:${port}`);
 })

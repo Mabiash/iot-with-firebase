@@ -1,10 +1,13 @@
 <script setup>
-import { ref, watch, computed} from "vue"
+import { ref, watch, computed } from "vue"
 import Header from "../components/pages/header.vue";
 import SideNav from "../components/pages/lappyNav.vue";
+import addNewRooms from "../components/pages/addNewroom.vue"
 import DashboardContent from "../components/pages/dashboardContent.vue";
 import RoomsContent from "../components/pages/roomsContent.vue"
 import historyContent from "../components/pages/historyContent.vue"
+
+const isAddRoom = ref(false)
 
 // Set values (as strings)
 const isDashboard = ref(
@@ -26,9 +29,9 @@ const isHistory = ref(
 );
 
 const headerTitle = computed(() => {
-  if (isDashboard.value) return 'Dashboard'
-  if (isRoom.value) return 'Rooms'
-  return 'History' 
+    if (isDashboard.value) return 'Dashboard'
+    if (isRoom.value) return 'Rooms'
+    return 'History'
 })
 function roomsEvent() {
     isDashboard.value = false;
@@ -37,6 +40,13 @@ function roomsEvent() {
     headerTitle.value = 'Rooms'
 }
 
+const openAddRoomForm = () => {
+    isAddRoom.value = true;
+}
+
+const test = () => {
+    isAddRoom.value = false;
+}
 
 function dashboardEvent() {
     isRoom.value = false;
@@ -59,12 +69,15 @@ watch([isDashboard, isRoom, isHistory], ([newDashboard, newRoom, newHistory]) =>
 </script>
 
 <template >
-    <SideNav @goToRooms="roomsEvent" @goToDashboard="dashboardEvent"  @goToHistory="historyEvent"/>
+    <SideNav @goToRooms="roomsEvent" @goToDashboard="dashboardEvent" @goToHistory="historyEvent" />
+
+    <addNewRooms @close-addRoom-form="test" v-if="isAddRoom" />
+
     <section class="main-content">
-        <Header :headerTitle="headerTitle" />
+        <Header :headerTitle="headerTitle" @open-addRoom-form="openAddRoomForm" />
         <DashboardContent v-if="isDashboard" />
         <RoomsContent v-if="isRoom" />
-        <historyContent v-if="isHistory"/>
+        <historyContent v-if="isHistory" />
         <div class="curve-t">
 
         </div>
@@ -84,7 +97,7 @@ watch([isDashboard, isRoom, isHistory], ([newDashboard, newRoom, newHistory]) =>
     overflow: hidden;
     border: 4px solid var(--primary-color);
     border-left: none;
-
+    background-color: #F5F7FA;
 }
 
 .curve-b,

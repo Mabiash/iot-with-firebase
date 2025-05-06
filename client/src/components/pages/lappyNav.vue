@@ -110,7 +110,7 @@ li i{
 }
 
 li:hover {
-    background-color: #e7e5e4;
+    background-color: #F5F7FA;
     transition: all 150ms ease;
     color: var(--primary-color);
     font-weight: bold;
@@ -139,29 +139,29 @@ li.active .na-r-b {
 li:hover .na-r-t {
     border-radius: 0 0 15px 0;
     top: -1rem;
-    box-shadow: 3.3px 5px 0px #e7e5e4;
+    box-shadow: 3.3px 5px 0px #F5F7FA;
 }
 
 li:hover .na-r-b {
     bottom: -1rem;
     border-radius: 0 15px 0 0;
-    box-shadow: 3.3px -5px 0px #e7e5e4;
+    box-shadow: 3.3px -5px 0px #F5F7FA;
 }
 
 li.active .na-r-t {
     border-radius: 0 0 15px 0;
     top: -1rem;
-    box-shadow: 3.3px 5px 0px #e7e5e4;
+    box-shadow: 3.3px 5px 0px #F5F7FA;
 }
 
 li.active .na-r-b {
     bottom: -1rem;
     border-radius: 0 15px 0 0;
-    box-shadow: 3.3px -5px 0px #e7e5e4;
+    box-shadow: 3.3px -5px 0px #F5F7FA;
 }
 
 li.active {
-    background: #e7e5e4;
+  background-color: #F5F7FA ;
     color: var(--primary-color);
     font-weight: bold;
 }

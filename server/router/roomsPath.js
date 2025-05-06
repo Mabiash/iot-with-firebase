@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const roomsPath = require("../controller/roomsPath.js")
+const {getRoomsPath, addRoomPath} = require("../controller/roomsPath.js")
 
+router.get("/path", getRoomsPath)
 
-router.get("/path", roomsPath)
+router.post("/path", addRoomPath)
 
 module.exports = router;

@@ -1,5 +1,10 @@
 <script setup>
-import {defineProps} from "vue"
+import {defineProps, defineEmits} from "vue"
+const emit = defineEmits(['open-addRoom-form'])
+
+function openAddRoomForm() {
+  emit('open-addRoom-form')
+}
 
 const props = defineProps({
     headerTitle: String
@@ -11,11 +16,8 @@ const props = defineProps({
     <header class="header">
         <h1 class="label">{{props.headerTitle}}</h1>
         <div class="ipt-con">
-            <!-- <div class="ipt">
-                <input type="text" placeholder="Search rooms..." class="search-room">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div> -->
-
+          
+            <button @click="openAddRoomForm" class="add-room"><i class="fa-solid fa-plus"></i><p>Add Room</p></button>
             <div class="profile-container">
 
             </div>
@@ -31,9 +33,11 @@ const props = defineProps({
     display: flex;
     justify-content: space-between;
     align-items: center;
-}.label {
+    margin-bottom: .5rem;
+}
+.label {
     color: var(--primary-color);
-    font-size: clamp(20px, 3vw, 26px);
+    font-size: clamp(24px, 3vw, 26px);
 }
 .ipt-con {
     width: fit-content;
@@ -44,29 +48,30 @@ const props = defineProps({
     gap: 10px;
 }
 
-.ipt {
-    flex: 1;
-    height: 100%;
-    position: relative;
+.add-room{
     display: flex;
+    padding: 10px 12px;
     align-items: center;
-}
-
-.ipt i {
-    position: absolute;
-    right: 10px;
-    color: oklch(26.2% 0.051 172.552);
+    gap: 7px;
+    border-radius: 5px;
+    border: 0;
+    background: var(--third-color);
+    color: white;
     cursor: pointer;
-}
-.search-room {
-    border: 2px solid var(--primary-color);
-    border-radius: 10px;
-    font-size: 12px;
-    padding: 6px 12px;
-    width: 100%;
-    height: 100%;
+    transition: all 150ms;
 }
 
+.add-room:hover{
+    opacity: .9;
+}
+
+.add-room p{
+    font-size: 12px;
+}
+
+.add-room i{
+    font-size: 14px;
+}
 .profile-container {
     height: 100%;
     aspect-ratio: 1;

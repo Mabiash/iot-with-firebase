@@ -20,6 +20,25 @@ const getRoomsPath = async (req, res) => {
   }
 };
 
+const addRoomPath = async(req, res) => {
+  try {
+      const data = req.body;
+      const snapshot = await db.collection('roomsPath')
+      .where('path', '==', data.path)
+      .get();
+
+    if (!snapshot.empty) {
+      return res.status(400).send({ message: 'Path already exists.' });
+    }
+      const docRef = await db.collection('roomsPath').add(data);
+  
+      res.status(200).json({ message: 'Document added', id: docRef.id });
+ 
+    } catch (err) {
+      console.error('Error adding document:', err);
+      res.status(500).json({ error: 'Failed to add document' });
+    }
+}
 
 
-module.exports = getRoomsPath;
+module.exports = { getRoomsPath, addRoomPath };

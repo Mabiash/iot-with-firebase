@@ -41,7 +41,7 @@ router.get("/user/:id", getUserById);
 
 router.get("/user-by-email", async (req, res) => {
   try {
-    const { email } = req.query; // Get email from query string
+    const { email } = req.query;
 
     if (!email) {
       return res.status(400).send("Email is required");

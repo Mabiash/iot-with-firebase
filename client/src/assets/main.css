@@ -2,8 +2,11 @@
 
 
 :root{
-  --primary-color: rgb(15, 4, 17);
-}
+  --secondary-color: linear-gradient(43deg, rgba(6, 154, 117, 0.82) 3%, rgba(16, 190, 111, 0.84) 37%, rgba(19, 154, 93, 0.79) 85%);
+  --primary-color: #00b17c;
+  --third-color:linear-gradient(43deg, rgba(2, 120, 92, 0.82) 3%, rgba(12, 145, 84, 0.84) 37%, rgba(12, 120, 71, 0.79) 85%);
+} 
+
 *{
   padding: 0;
   margin: 0;
@@ -16,7 +19,7 @@ body{
   height: 100vh;
   max-width: 1800px;
   overflow: hidden;
-  background:  rgba(196, 195, 194, 0.412);
+  background: #F5F7FA ;
   display: flex;
   
 }

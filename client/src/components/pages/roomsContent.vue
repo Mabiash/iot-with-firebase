@@ -1,19 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted} from "vue";
 import { roomsData } from "../../stores/roomsData"
 const rooms = roomsData();
 
-const isOpen = ref(false);
-
-const changeRoomStatus = (id) => {
-  
-    rooms.data.forEach(room => {
-        console.log(room.id);
-        if(room.id === id){
-            room.isOpen = !room.isOpen;
-        }
-    });
-}
+onMounted(() => {
+    rooms.fetchRooms();
+})
 </script>
 
 <template>
@@ -23,6 +15,8 @@ const changeRoomStatus = (id) => {
                 <div class="header">
                     <div class="status-header">
                         <p>Status</p>
+                        <span v-if="item.isOnline" class="online"></span>
+                        <span v-if="!item.isOnline" class="offline"></span>
                     </div>
                     <div class="curve">
                         <p v-if="item.isOpen" class="open">Open</p>
@@ -31,16 +25,18 @@ const changeRoomStatus = (id) => {
                     <div class="shadow"></div>
                 </div>
                 <div class="content-container">
+                   <div>
                     <h2>
-                        <span>{{ item.roomName }}</span> <span v-if="item.isOnline" class="online"></span>
-                        <span v-if="!item.isOnline" class="offline"></span>
+                        <span>{{ item.roomName }}</span> 
                     </h2>
                     <p>{{ item.date.toLocaleString() }}</p>
-                    <p>{{ item.reponsible }}</p>
-                    <button @click="changeRoomStatus(item.id)">
-                        <p v-if="!item.isOpen">Open Room</p>
-                        <p v-if="item.isOpen">Close Room</p>
+                    <p>{{ item.responsible }}</p>
+                   </div>
+                    <button>
+                      <p>Manage Room</p>
+                      <i class="fa-solid fa-pen-to-square"></i>
                     </button>
+            
                 </div>
             </div>
         </div>
@@ -50,6 +46,7 @@ const changeRoomStatus = (id) => {
 <style scoped>
 .con {
     height: fit-content;
+ 
     width: 100%;
     display: grid;
     flex-wrap: wrap;
@@ -66,8 +63,9 @@ const changeRoomStatus = (id) => {
 
 .box-container {
     height: 100%;
-    min-height: 12rem;
+    min-height: 15rem;
     border-radius: 10px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -75,11 +73,19 @@ const changeRoomStatus = (id) => {
 }
 
 .content-container {
-    flex: 1;
+    min-height:12.78rem;
     width: 100%;
-    background-color: rgb(18, 0, 24);
+    background:  rgb(15, 126, 89);
     border-radius: 0 10px 0;
     padding: 1rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    
+    position: relative;
+    justify-content: space-between;
+}
+
+.content-container div{
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -87,13 +93,17 @@ const changeRoomStatus = (id) => {
 
 .content-container button {
     margin-top: 1rem;
-    background-color: rgba(153, 192, 179, 0.315);
+    background-color: rgba(14, 15, 15, 0.397);
     border: 0;
     color: rgb(252, 255, 254);
-    padding: 7px;
+    padding: 8px;
     border-radius: 5px;
     cursor: pointer;
     transition: all 150ms ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
 h2 {
@@ -103,10 +113,10 @@ h2 {
 }
 h2 span {
     display: flex;
-    font-size: 20px;
+    font-size: 18px;
 }
 
-h2 span:not(:first-child){
+.status-header span:not(:first-child){
     height: 12px;
     aspect-ratio: 1;
     border-radius: 50rem;
@@ -144,7 +154,7 @@ span.offline{
     right: 0;
     top: 0;
     border-radius: 0 0 0 20px;
-    box-shadow: -10px 10px 0 rgb(18, 0, 24);
+    box-shadow: -10px 10px 0 rgb(15, 126, 89);;
 }
 
 .curve {
@@ -180,10 +190,11 @@ span.offline{
 .status-header {
     border-radius: 0 15px 0 0;
     width: 55%;
-    background-color: rgb(18, 0, 24);
+    background-color: rgb(15, 126, 89);;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 5px;
 }
 
 .status-header p {

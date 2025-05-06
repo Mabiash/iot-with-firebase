@@ -79,7 +79,7 @@ h4{
 .table-container {
     width: 100%;    
     height: 100%;
-    background: rgba(3, 70, 77, 0.733);
+    background: var(--third-color);
     padding: 10px;
     border-radius: 10px;
     overflow: auto;

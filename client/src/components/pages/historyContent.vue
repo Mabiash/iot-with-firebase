@@ -104,7 +104,7 @@ section {
 
 .filter-method,
 .filter-date {
-    background: rgba(1, 30, 32, 0.918);
+    background:  rgb(15, 126, 89);
     padding: 0px 5px 0 0;
     border-radius: 5px;
 
@@ -127,7 +127,7 @@ select {
 
 .table-container {
     height: fit-content;
-    background: rgba(3, 70, 77, 0.733);
+    background: var(--third-color);
     border-radius: 10px;
     overflow: auto;
     scrollbar-width: thin;
