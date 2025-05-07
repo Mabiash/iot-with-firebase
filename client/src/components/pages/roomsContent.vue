@@ -1,15 +1,27 @@
 <script setup>
-import { ref, onMounted} from "vue";
+import { onMounted, ref} from "vue";
 import { roomsData } from "../../stores/roomsData"
 const rooms = roomsData();
+import manageRoon from './manageRoom.vue';
+const isManageRoom = ref(false)
 
-onMounted(() => {
-    rooms.fetchRooms();
-})
+const roomName = ref(null);
+
+const openManageRoomForm = (name) => {
+    isManageRoom.value = true;
+    roomName.value = name;
+}
+
+const closeManageRoomForm = () => {
+    isManageRoom.value = false;
+}
 </script>
 
 <template>
     <section class="rooms">
+
+        <manageRoon v-if="isManageRoom" :room="roomName" @close-manageRoom-modal="closeManageRoomForm"/>
+
         <div class="con">
             <div v-for="(item, index) in rooms.data" :key="index" class="box-container">
                 <div class="header">
@@ -32,7 +44,7 @@ onMounted(() => {
                     <p>{{ item.date.toLocaleString() }}</p>
                     <p>{{ item.responsible }}</p>
                    </div>
-                    <button>
+                    <button @click="openManageRoomForm(item.id)">
                       <p>Manage Room</p>
                       <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -58,7 +70,6 @@ onMounted(() => {
     padding: 2rem 1.4rem;
     max-height: 100vh;
     overflow-y: auto;
-
 }
 
 .box-container {
@@ -96,7 +107,7 @@ onMounted(() => {
     background-color: rgba(14, 15, 15, 0.397);
     border: 0;
     color: rgb(252, 255, 254);
-    padding: 8px;
+    padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     transition: all 150ms ease;

@@ -40,5 +40,32 @@ const addRoomPath = async(req, res) => {
     }
 }
 
+const deleteRoomPath = async (req, res) => {
+  try {
+    const { path }= req.body;
 
-module.exports = { getRoomsPath, addRoomPath };
+    const snapshot = await db.collection('roomsPath')
+      .where('path', '==', path)
+      .get();
+
+    if (snapshot.empty) {
+      return res.status(404).json({ msg: "No matching room found." });
+    }
+
+    const batch = db.batch();
+    snapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+
+    return res.status(200).json({ msg: "Successfully deleted the room!" });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: "Error deleting room.", error: error.message });
+  }
+}
+
+
+module.exports = { getRoomsPath, addRoomPath, deleteRoomPath};

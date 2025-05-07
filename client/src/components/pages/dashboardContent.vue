@@ -5,29 +5,11 @@ import CustomMDButton from "./mediumButton.vue";
 import CustomSMButton from "./smallButton.vue"
 import { roomsData } from "../../stores/roomsData"
 import RecentLogs from "./recentActivity.vue"
-import { db } from '../../config/firebase.js';
-import { ref as dbRef, update, get } from 'firebase/database'; 
 const rooms = roomsData()
 
 const props = defineProps({
     isDashboard: String
 })
-
-const closedAllDoors = () => {
-    rooms.data.forEach(room => {
-        room.isOpen = false;
-    })
-}
-
-const test = () => {
-    alert(0)
-}
-
-onMounted(async () => {
-    rooms.fetchRooms();
-});
-
-console.log(rooms.data);
 
 </script>
 

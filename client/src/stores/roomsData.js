@@ -1,7 +1,14 @@
 import { defineStore } from "pinia";
-import { ref as vueRef, onMounted } from "vue";
 import { db } from "../config/firebase.js";
-import { ref as dbRef, onValue, get, update } from "firebase/database";
+import {notif} from "../components/js/notification.js"
+import {
+  ref as dbRef,
+  onValue,
+  get,
+  update,
+  remove,
+  ref,
+} from "firebase/database";
 
 export const roomsData = defineStore("counter", {
   state: () => ({
@@ -36,30 +43,25 @@ export const roomsData = defineStore("counter", {
   actions: {
     async fetchRooms() {
       try {
-        const res = await fetch("http://192.168.1.4:3000/rooms/path");
-        const dataPath = await res.json();
-        const paths = dataPath;
+        const statusRef = dbRef(db, "rooms");
+        onValue(statusRef, (snapshot) => {
+          const val = snapshot.val();
 
-        paths.pathData.forEach((item, index) => {
-          const statusRef = dbRef(db, `rooms/${item.path}`);
-          onValue(statusRef, (snapshot) => {
-            const newData = snapshot.val();
-            const existingIndex = this.data.findIndex((_, i) => i === index);
-            if (existingIndex !== -1) {
-              this.data[existingIndex] = newData;
-            } else {
-              this.data.push(newData);
-            }
+          if (!val) {
+            console.log("No data found");
+            return;
+          }
+          this.data = [];
+          Object.entries(val).forEach(([key, data]) => {
+            this.data.push({ id: key, ...data });
           });
-        }) 
-
-      
+        });
       } catch (err) {
         console.error("Failed to fetch rooms:", err);
       }
     },
 
-    async changeRoomStatus(path, newValue) {
+    async changeRoomStatus(path) {
       const roomRef = dbRef(db, `rooms/${path}`);
 
       try {
@@ -67,11 +69,35 @@ export const roomsData = defineStore("counter", {
         if (snapshot.exists()) {
           const currentData = snapshot.val();
           const currentStatus = currentData.isOpen;
-          await update(roomRef, { isOpen: !currentStatus });
+          await update(roomRef, {
+            isOpen: !currentStatus,
+            date: new Date().toLocaleString(),
+            responsible: "Daryl",
+          });
           console.log("Room status updated!");
         } else {
           console.log("Room not found");
         }
+      } catch (error) {
+        console.error("Failed to update value:", error);
+      }
+    },
+
+    async changeRoomName(path, newName) {
+      const roomRef = dbRef(db, `rooms/${path}`);
+
+      try {
+        const snapshot = await get(roomRef);
+        if (snapshot.exists()) {
+          await update(roomRef, {
+            roomName : newName
+          });
+          
+        
+        } else {
+          console.log("Room not found");
+        }
+      
       } catch (error) {
         console.error("Failed to update value:", error);
       }
@@ -100,6 +126,25 @@ export const roomsData = defineStore("counter", {
         }
       } catch (error) {
         console.error("Failed to open all doors:", error);
+      }
+    },
+
+
+
+    async deleteRoomPath(path) {
+      try {
+        const collectionRef = ref(db, `rooms/${path}`);
+        const snapshot = await get(collectionRef);
+
+        if (!snapshot.exists()) {
+          alert("Collection is empty or does not exist");
+          return;
+        }
+
+        await remove(collectionRef);
+        alert(`Room ${path} was successfully deleted!`)
+      } catch (error) {
+        console.error("Error:", error);
       }
     },
   },

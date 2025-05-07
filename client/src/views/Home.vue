@@ -1,13 +1,17 @@
 <script setup>
-import { ref, watch, computed } from "vue"
+import { ref, watch, computed, onMounted } from "vue"
 import Header from "../components/pages/header.vue";
 import SideNav from "../components/pages/lappyNav.vue";
-import addNewRooms from "../components/pages/addNewroom.vue"
+import addNewRooms from "../components/pages/addNewroom.vue";
 import DashboardContent from "../components/pages/dashboardContent.vue";
 import RoomsContent from "../components/pages/roomsContent.vue"
 import historyContent from "../components/pages/historyContent.vue"
 
-const isAddRoom = ref(false)
+import { roomsData } from "../stores/roomsData.js"
+const rooms = roomsData();
+
+const isAddRoom = ref(false);
+
 
 // Set values (as strings)
 const isDashboard = ref(
@@ -44,9 +48,11 @@ const openAddRoomForm = () => {
     isAddRoom.value = true;
 }
 
-const test = () => {
+const closeModal = () => {
     isAddRoom.value = false;
 }
+
+
 
 function dashboardEvent() {
     isRoom.value = false;
@@ -61,6 +67,11 @@ const historyEvent = () => {
     isDashboard.value = false;
     headerTitle.value = 'History'
 }
+
+onMounted(() => {
+    rooms.fetchRooms();
+})
+
 watch([isDashboard, isRoom, isHistory], ([newDashboard, newRoom, newHistory]) => {
     localStorage.setItem('isDashboard', newDashboard.toString());
     localStorage.setItem('isRoom', newRoom.toString());
@@ -71,7 +82,7 @@ watch([isDashboard, isRoom, isHistory], ([newDashboard, newRoom, newHistory]) =>
 <template >
     <SideNav @goToRooms="roomsEvent" @goToDashboard="dashboardEvent" @goToHistory="historyEvent" />
 
-    <addNewRooms @close-addRoom-form="test" v-if="isAddRoom" />
+    <addNewRooms @close-addRoom-form="closeModal" v-if="isAddRoom" />
 
     <section class="main-content">
         <Header :headerTitle="headerTitle" @open-addRoom-form="openAddRoomForm" />
