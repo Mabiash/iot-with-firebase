@@ -8,7 +8,7 @@ const result = vueRef(null);
 
 async function getData() {
   try {
-    const statusRef = dbRef(db, 'rooms');
+    const statusRef = dbRef(db, 'history');
     onValue(statusRef, (snapshot) => {
       const val = snapshot.val();
 
@@ -23,7 +23,7 @@ async function getData() {
      
       });
 
-      console.log(isExist);
+      console.log(val);
     });
 
   } catch (err) {

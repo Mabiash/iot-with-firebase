@@ -70,6 +70,12 @@ watch(
                 <div class="na-r-t"></div>
                 <div class="na-r-b"></div>
             </li>
+            <li>
+                <i class="fa-solid fa-file"></i>
+                <p>Students List</p>
+                <div class="na-r-t"></div>
+                <div class="na-r-b"></div>
+            </li>
         </ul>
     </nav>
 </template>

@@ -70,6 +70,7 @@ const historyEvent = () => {
 
 onMounted(() => {
     rooms.fetchRooms();
+    rooms.fetchHistory();
 })
 
 watch([isDashboard, isRoom, isHistory], ([newDashboard, newRoom, newHistory]) => {

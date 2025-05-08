@@ -3,6 +3,7 @@ import { onMounted, ref} from "vue";
 import { roomsData } from "../../stores/roomsData"
 const rooms = roomsData();
 import manageRoon from './manageRoom.vue';
+
 const isManageRoom = ref(false)
 
 const roomName = ref(null);
@@ -15,12 +16,18 @@ const openManageRoomForm = (name) => {
 const closeManageRoomForm = () => {
     isManageRoom.value = false;
 }
+
+
+const test = (msg) => {
+    isManageRoom.value = msg;
+}
+
 </script>
 
 <template>
     <section class="rooms">
 
-        <manageRoon v-if="isManageRoom" :room="roomName" @close-manageRoom-modal="closeManageRoomForm"/>
+        <manageRoon v-if="isManageRoom" :room="roomName" @close-manageRoom-modal="closeManageRoomForm" @success-delete="test"/>
 
         <div class="con">
             <div v-for="(item, index) in rooms.data" :key="index" class="box-container">
@@ -121,10 +128,12 @@ h2 {
     display: flex;
     gap: 7px;
     align-items: center;
+   
 }
 h2 span {
     display: flex;
     font-size: 18px;
+   
 }
 
 .status-header span:not(:first-child){

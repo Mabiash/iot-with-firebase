@@ -1,41 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { roomsData } from "../../stores/roomsData"
+const rooms = roomsData()
+const historyData = rooms.historyData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-const rooms = ref([
-    {
-        roomName: "BIST 2F111111",
-        reponsible: "Kieth Mendizabal",
-        date: new Date(),
-        action: "Open",
-        stdId: "MMC2023-00457",
-        section: "BSIT 2F3"
-    },
-    {
-        roomName: "BIST 2F1",
-        reponsible: "Kieth Mendizabal",
-        date: new Date(),
-        action: "Open",
-        stdId: "MMC2023-00457",
-        section: "BSIT 2F3"
-    },
-    {
-        roomName: "BIST 2F2",
-        reponsible: "Kieth Mendizabal",
-        date: new Date(),
-        action: "Open",
-        stdId: "MMC2023-00457",
-        section: "BSIT 2F3"
-    },
-    {
-        roomName: "BIST 2F3",
-        reponsible: "Kieth Mendizabal",
-        date: new Date(),
-        action: "Open",
-        stdId: "MMC2023-00457",
-        section: "BSIT 2F3"
-    },
-
-])
+console.log(historyData);
 </script>
 
 <template>
@@ -44,7 +13,7 @@ const rooms = ref([
             <div class="filter-method">
                 <select name="" id="">
                     <option value="All">All</option>
-                    <div v-for="item in rooms" :key="index">
+                    <div v-for="item in historyData">
                         <option :value="item.roomName">{{ item.roomName }}</option>
                     </div>
                 </select>
@@ -68,12 +37,12 @@ const rooms = ref([
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="room in rooms">
+                    <tr v-for="room in historyData">
                         <td>{{ room.roomName }}</td>
-                        <td>{{ room.reponsible }}</td>
+                        <td>{{ room.responsible }}</td>
                         <td>{{ room.stdId }}</td>
                         <td>{{ room.section }}</td>
-                        <td>{{ room.date.toLocaleString() }}</td>
+                        <td>{{ room.date }}</td>
                         <td>{{ room.action }}</td>
                     </tr>
                 </tbody>
@@ -131,13 +100,15 @@ select {
     border-radius: 10px;
     overflow: auto;
     scrollbar-width: thin;
-    max-height: 100vh;
+    max-height: 70vh;
+  
 }
 
 table {
     width: 100%;
     min-width: 50rem;
     padding: 10px;
+
 }
 
 thead {

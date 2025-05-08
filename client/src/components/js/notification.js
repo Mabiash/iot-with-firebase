@@ -1,6 +1,6 @@
 
 // utils/notif.js
-export function notif(message = '', duration = 3000, bc) {
+export function notif(message = '', duration = 1000, bc) {
     // Create container if not exists
     let container = document.querySelector('#notif-container');
     if (!container) {

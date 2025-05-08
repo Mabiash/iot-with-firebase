@@ -14,6 +14,9 @@ const addRoomInRealtimeDb = () => {
     let iptRoomName = document.getElementById('room-name').value.toUpperCase();
     let iptCurrentStatus = document.getElementById('current-state').value;
 
+
+    if(iptRoomName == null || iptRoomName == "") return;
+
     const statusRef = ref(db, 'rooms');
     onValue(statusRef, (snapshot) => {
         const val = snapshot.val();
@@ -44,7 +47,8 @@ const addRoomInRealtimeDb = () => {
         "isOnline": true,
         "isOpen": iptCurrentStatus === "Open" ? true : false,
         "responsible": "Unknown",
-        "roomName": iptRoomName
+        "roomName": iptRoomName,
+        "stdId" : "MMC2023-00457"
     });
 
 

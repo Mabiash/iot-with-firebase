@@ -4,7 +4,7 @@ import { roomsData } from "../../stores/roomsData"
 import { notif } from "../js/notification.js"
 const rooms = roomsData();
 
-const emit = defineEmits(["close-manageRoom-modal"])
+const emit = defineEmits(["close-manageRoom-modal", "success-delete"])
 const props = defineProps({
     room: {
         type: String,
@@ -16,14 +16,17 @@ const closeManageRoomModal = () => {
     emit('close-manageRoom-modal')
 }
 
+
+
 const deleteRoom = () => {
     rooms.deleteRoomPath(props.room)
+    emit("success-delete", false)
 }
+
 const updateroomName = () => {
   const newName = prompt(`Enter New Room Name: ${props.room}`);
 
   if (newName === null) {
-    // User cancelled the prompt
     notif("Update canceled.", 3000, "gray");
     return;
   }
@@ -36,9 +39,6 @@ const updateroomName = () => {
   rooms.changeRoomName(props.room, newName.trim());
   notif("Successfully updated!", 3000, "green");
 };
-
-
-
 
 </script> 
 

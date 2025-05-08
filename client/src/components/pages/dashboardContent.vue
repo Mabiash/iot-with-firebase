@@ -3,13 +3,16 @@ import { onMounted, ref } from 'vue';
 import CustomMDButton from "./mediumButton.vue";
 
 import CustomSMButton from "./smallButton.vue"
-import { roomsData } from "../../stores/roomsData"
+
 import RecentLogs from "./recentActivity.vue"
+import { roomsData } from "../../stores/roomsData"
 const rooms = roomsData()
 
 const props = defineProps({
     isDashboard: String
 })
+
+console.log(rooms.historyData);
 
 </script>
 
@@ -61,10 +64,28 @@ const props = defineProps({
                     </div>
                 </div>
             </div>
-            <div class="boxes recent-logs">
-                <RecentLogs />
+            <div class="boxes rooms-device-name">
+                <h4>Rooms</h4>
+                <div class="table-con">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Device Number</th>
+                                <th>Room Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in rooms.data" :key="index">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.roomName }}</td>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
-        
+
         </section>
     </transition>
 </template>
@@ -77,6 +98,60 @@ h5 {
     place-items: center;
     font-size: clamp(20px, 4vw, 22px);
 }
+.rooms-device-name h4 {
+    font-size: clamp(16px, 3vw, 20px);
+    width: 100%;
+    color: black;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    color: white;
+    height: 100%;
+}
+
+.table-con {
+    flex: 1;
+    border-radius: 10px;
+    background: var(--third-color);
+    min-height: 28.5rem;
+    min-width: 350px;
+    max-height: 28.5rem;
+    overflow: auto;
+    position: relative;
+    scrollbar-width: thin;
+}
+
+table thead {
+    position: sticky;
+    background-color: rgba(0, 0, 0, 0.596);
+    backdrop-filter: blur(3px);
+    top: 0;
+}
+
+tbody tr {
+    transition: all 150ms;
+}
+
+tbody tr:hover {
+    background-color: rgba(28, 51, 43, 0.37);
+    cursor: pointer;
+}
+
+th,
+td {
+    flex: 1;
+    border-right: 1px solid rgb(243, 243, 243);
+    border-bottom: 1px solid rgb(243, 243, 243);
+    padding: 10px;
+    text-align: left;
+}
+
+th:last-child, td:last-child{
+    border-right: none;
+}
+
 .content-container {
     height: fit-content;
     width: 100%;
@@ -94,8 +169,16 @@ h5 {
     flex: 1;
     height: fit-content;
     min-height: 28.5rem;
-    min-width: 300px;
+    min-width: 350px;
     max-height: 28.5rem;
+}
+
+.rooms-device-name {
+    flex: 1;
+    background: transparent;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .rooms-open-con,
@@ -162,7 +245,7 @@ h5 {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border-radius: 10px;
-    
+
     padding: 10px;
     color: rgb(255, 254, 239);
     display: flex;
@@ -178,8 +261,12 @@ h4 {
 
 .rooms h3 {
     letter-spacing: .1rem;
-    font-size: 16=8px;
+    font-size: clamp(16px, 2vw, 18px);
+    max-width: 100%;
+    width: 100%;
+    word-wrap: break-word;
 }
+
 .rooms p {
     font-size: clamp(10px, 2vw, 14px);
     letter-spacing: .02rem;
@@ -211,17 +298,7 @@ h4 {
     color: white;
 }
 
-.recent-logs {
-    border-radius: 10px;
-    overflow-x: hidden;
-    min-height: 0;
-    height: fit-content;
-    min-width: 480px;
-    overflow: hidden;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    border-radius: 5px;
-}
+
 
 
 @media screen and (max-width: 650px) {
@@ -241,10 +318,7 @@ h4 {
         padding-bottom: 7rem;
     }
 
-    .recent-logs {
-        min-width: 200px;
-        width: 100vw !important;
-    }
+
 
 
 }

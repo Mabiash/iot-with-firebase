@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { db } from "../config/firebase.js";
-import {notif} from "../components/js/notification.js"
+import { notif } from "../components/js/notification.js";
 import {
   ref as dbRef,
   onValue,
@@ -8,11 +8,13 @@ import {
   update,
   remove,
   ref,
+  set
 } from "firebase/database";
 
 export const roomsData = defineStore("counter", {
   state: () => ({
     data: [],
+    historyData : []
   }),
 
   getters: {
@@ -61,6 +63,29 @@ export const roomsData = defineStore("counter", {
       }
     },
 
+    async fetchHistory() {
+      try {
+        const statusRef = dbRef(db, "history");
+        onValue(statusRef, (snapshot) => {
+          const val = snapshot.val();
+
+          if (!val) {
+            console.log("No data found");
+            return;
+          }
+          this.historyData = [];
+          Object.entries(val).forEach(([key, data]) => {
+            this.historyData.push({ id: key, ...data });
+          });
+        
+        });
+
+       
+      } catch (err) {
+        console.error("Failed to fetch rooms:", err);
+      }
+    },
+
     async changeRoomStatus(path) {
       const roomRef = dbRef(db, `rooms/${path}`);
 
@@ -90,17 +115,18 @@ export const roomsData = defineStore("counter", {
         const snapshot = await get(roomRef);
         if (snapshot.exists()) {
           await update(roomRef, {
-            roomName : newName
+            roomName: newName,
           });
-          
-        
         } else {
           console.log("Room not found");
         }
-      
       } catch (error) {
         console.error("Failed to update value:", error);
       }
+    },
+
+     generateUID() {
+      return '_' + Math.random().toString(36).substr(2, 9);
     },
 
     async changeStatusAllRooms(roomCurrenStatus) {
@@ -129,23 +155,40 @@ export const roomsData = defineStore("counter", {
       }
     },
 
-
-
     async deleteRoomPath(path) {
       try {
-        const collectionRef = ref(db, `rooms/${path}`);
-        const snapshot = await get(collectionRef);
-
+        const roomRef = dbRef(db, `rooms/${path}`);
+        const historyRef = dbRef(db, `history/${ this.generateUID()}`);
+    
+        const snapshot = await get(roomRef);
+    
         if (!snapshot.exists()) {
           alert("Collection is empty or does not exist");
           return;
         }
+    
+        const val = snapshot.val();
+        if (!val) {
+          console.log("No data found");
+          return;
+        }
+    
+        // Store data in history before deletion
+        await set(historyRef, {action: `Delete Room ${val.roomName}`, ...val});
 
-        await remove(collectionRef);
-        alert(`Room ${path} was successfully deleted!`)
+    
+        // Delete the original data
+        await remove(roomRef);
+    
+        notif(
+          "Successfully Deleted!",
+          3000,
+          "linear-gradient(43deg, rgba(6, 154, 117, 0.82) 3%, rgba(16, 190, 111, 0.84) 37%, rgba(19, 154, 93, 0.79) 85%)"
+        );
       } catch (error) {
         console.error("Error:", error);
       }
-    },
+    }
+    
   },
 });
